@@ -8,6 +8,11 @@ const ProductSchema = new Schema({
         trim: true,
         required: 'Title is required'
     },
+    brand: {
+        type: String,
+        trim: true,
+        required: 'Brand is required'
+    },
     description: {
         type: String,
         trim: true,

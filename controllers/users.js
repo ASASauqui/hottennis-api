@@ -186,9 +186,16 @@ const getInfo = async (req, res) => {
     }
 }
 
+const checkToken = async (req, res) => {
+    res.status(200).json({
+        message: 'Token is valid'
+    });
+}
+
 module.exports = {
     register,
     login,
     getInfo,
-    updateInfo
+    updateInfo,
+    checkToken
 }

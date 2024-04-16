@@ -17,11 +17,16 @@ const fs = require('fs');
  */
 const getAllProducts = async (req, res) => {
     try {
-        const { limit=10, offset=1 } = req.query;
+        const { limit=10, offset=1, search="" } = req.query;
 
-        const products = await Product.find()
-            .limit(Number(limit))
-            .skip(Number(offset) - 1);
+        var products = null;
+
+        if(search) {
+            products = await Product.find({ title: { $regex: search, $options: 'i' } }).limit(limit).skip((offset-1)*limit);
+        } else {
+            products = await Product.find().limit(limit).skip((offset-1)*limit);
+        }
+
 
         products.map((product) => {
             product.images = product.images.map((image) => {
@@ -38,6 +43,25 @@ const getAllProducts = async (req, res) => {
     }
 };
 
+const getProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const product = await Product.findById(id);
+
+        product.images = product.images.map((image) => {
+            return `${process.env.API_URL}/products/image/${image}`;
+        });
+
+        res.json(product);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Error getting product'
+        });
+    }
+}
+
 /**
  * The function `createMove` is an asynchronous function that creates a new move in Cashflow
  * @param req - The `req` parameter is the request object that contains information about the HTTP
@@ -50,11 +74,11 @@ const getAllProducts = async (req, res) => {
  */
 const createProduct = async (req, res) => {
     try {
-        const { title, description, price } = req.body;
+        const { title, description, price, brand } = req.body;
 
-        if(!title || !description || !price || !req.files) {
+        if(!title || !brand || !description || !price || !req.files) {
             return res.status(400).json({
-                message: 'Missing required fields( title, description, price, images )'
+                message: 'Missing required fields( title, description, price, images, brand )'
             });
         }
 
@@ -74,6 +98,7 @@ const createProduct = async (req, res) => {
 
         const product = new Product({
             title: title,
+            brand: brand,
             description: description,
             price: price,
             images: images_ids,
@@ -112,5 +137,6 @@ const returnImage = async (req, res) => {
 module.exports = {
     getAllProducts,
     createProduct,
-    returnImage
+    returnImage,
+    getProduct
 }
