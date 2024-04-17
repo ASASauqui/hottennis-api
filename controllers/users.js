@@ -33,11 +33,11 @@ const register = async (req, res) => {
             });
 
 
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$/;
-        if(!passwordRegex.test(password))
-            return res.status(400).json({
-                message: 'La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula, un número y un caracter especial'
-            });
+        // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{6,}$/;
+        // if(!passwordRegex.test(password))
+        //     return res.status(400).json({
+        //         message: 'La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula, un número y un caracter especial'
+        //     });
 
         const phoneRegex = /^\d{10}$/;
         if(!phoneRegex.test(phone))
