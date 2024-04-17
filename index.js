@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(console.log('Mongo DB Connected'))
 .catch((err) => console.log("DB Connection Error: ", err));
 
-readdirSync("./routes").map((r) => app.use(`/${r.split('.')[0]}`, require(`./routes/${r}`)));
+readdirSync("./routes").map((r) => app.use(`/api/${r.split('.')[0]}`, require(`./routes/${r}`)));
 
 app.listen(process.env.PORT, () => {
     console.log(`Hottennis running on port ${process.env.PORT}`);
