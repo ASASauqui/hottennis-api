@@ -82,7 +82,7 @@ const createProduct = async (req, res) => {
             });
         }
 
-        var images = req.files;        
+        var images = req.files;               
 
         images = images.map((image) => {
             return {
