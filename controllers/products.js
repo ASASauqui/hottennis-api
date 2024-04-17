@@ -74,11 +74,11 @@ const getProduct = async (req, res) => {
  */
 const createProduct = async (req, res) => {
     try {
-        const { title, description, price, brand } = req.body;
+        const { title, description, price, brand, stock } = req.body;
 
-        if(!title || !brand || !description || !price || !req.files) {
+        if(!title || !brand || !description || !price || !stock || !req.files) {
             return res.status(400).json({
-                message: 'Missing required fields( title, description, price, images, brand )'
+                message: 'Missing required fields( title, description, price, images, brand, stock )'
             });
         }
 
@@ -101,6 +101,7 @@ const createProduct = async (req, res) => {
             brand: brand,
             description: description,
             price: price,
+            stock: stock,
             images: images_ids,
         });
 

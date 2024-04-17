@@ -21,6 +21,11 @@ const ProductSchema = new Schema({
     price: {
         type: Number,
         required: 'price is required'
+    },  
+    stock: {
+        type: Number,
+        required: 'Stock is required',
+        min: 0
     },    
     images: {
         type: Array,
