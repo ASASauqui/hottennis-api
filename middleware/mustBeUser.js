@@ -6,7 +6,7 @@ exports.mustBeUser = async (req, res, next) => {
         try {
             const token = req.headers.authorization.split(" ")[1];
             const decoded = jwt.verify(token, process.env.API_KEY);
-            
+
             const user = await User.find({ _id: decoded._id })
             .select('-password');
 
