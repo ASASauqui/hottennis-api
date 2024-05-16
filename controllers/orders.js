@@ -2,12 +2,13 @@ const Order = require('../schemas/order.schema');
 const Product = require('../schemas/product.schema');
 
 
-const STATUS = ['Not processed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+const STATUS = ['Not processed', 'Payment failed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 
 const getOrders = async (req, res) => {
     const { user } = req;
     try {
-        const orders = await Order.find({ user: user._id });
+
+        const orders = await Order.find({ user: user._id, status: { $nin: ['Payment failed', 'Payment needed'] } }).populate('address');
         
         res.json(orders);
     } catch (error) {
@@ -68,9 +69,9 @@ const createOrder = async (req, res) => {
     }
 
     products.forEach((product) => {
-        if(!product._id || !product.quantity) {
+        if(!product._id || !product.quantity || !product.size ) {
             return res.status(400).json({
-                message: 'Missing required fields( _id, quantity )'
+                message: 'Missing required fields( _id, quantity, size )'
             });
         }
     });
@@ -79,8 +80,8 @@ const createOrder = async (req, res) => {
 
         const _products = await Product.find({ _id: { $in: products } });        
 
-        const total = _products.reduce((acc, product) => {            
-            const product_index = products.findIndex((p) => p._id == product._id);            
+        const total = products.reduce((acc, product) => {            
+            const product_index = _products.findIndex((p) => p._id == product._id);            
             
             if(product_index == -1) {
                 return acc;

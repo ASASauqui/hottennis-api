@@ -15,6 +15,6 @@ const {
 router.get('/', mustBeUser, getOrders);
 router.get('/:id', mustBeUser, getOrder);
 router.post('/', mustBeUser, createOrder);
-router.put('/:id', adminMiddleware, updateOrder);
+router.put('/:id', mustBeUser, updateOrder);
 
 module.exports = router;

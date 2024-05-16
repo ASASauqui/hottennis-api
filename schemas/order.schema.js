@@ -18,8 +18,8 @@ const OrderSchema = new Schema({
     },
     status: {
         type: String,
-        default: 'Not processed',
-        enum: ['Not processed', 'Processing', 'Shipped', 'Delivered', 'Cancelled']
+        default: 'Payment needed',
+        enum: ['Payment needed', 'Payment failed', 'Not processed', 'Processing', 'Shipped', 'Delivered', 'Cancelled']
     },    
     user: {
         type: Schema.Types.ObjectId,

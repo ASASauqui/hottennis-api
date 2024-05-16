@@ -174,6 +174,43 @@ const updateInfo = async (req, res) => {
     }
 }
 
+const changePassword = async (req, res) => {
+    const { _id } = req.user;
+    try {
+        const body = req.body;
+
+        const { currentPassword, newPassword } = body;
+
+        if(!currentPassword || !newPassword)
+            return res.status(400).json({
+                message: 'currentPassword and newPassword are required'
+            });
+
+        const user = await User.findById(_id);
+
+        const validPassword = await bcrypt.compare(currentPassword, user.password);
+
+        if(!validPassword)
+            return res.status(401).json({
+                message: 'Contraseña incorrecta'
+            });
+
+        user.password = await bcrypt.hash(newPassword, 10);
+
+        user.save();
+
+        res.status(200).json({
+            message: 'Password changed successfully'
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Error changing password'
+        });
+    }
+}
+
 const getInfo = async (req, res) => {
     const { user } = req;
     try {
@@ -197,5 +234,6 @@ module.exports = {
     login,
     getInfo,
     updateInfo,
-    checkToken
+    checkToken,
+    changePassword
 }
